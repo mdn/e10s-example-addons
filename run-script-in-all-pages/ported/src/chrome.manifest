@@ -1,3 +1,0 @@
-content	modify-all-pages	chrome/content/	contentaccessible=yes
-
-overlay	chrome://browser/content/browser.xul	chrome://modify-all-pages/content/main.xul

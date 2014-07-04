@@ -42,6 +42,7 @@ function getGifs(message) {
 }
 
 function loadScript(event) {
+  // this seems insane
   var browserMM = event.target.ownerDocument.defaultView.gBrowser.selectedBrowser.messageManager;
   browserMM.loadFrameScript("chrome://gifinate/content/frame-script.js", true);
   browserMM.addMessageListener("request-gifs", getGifs);

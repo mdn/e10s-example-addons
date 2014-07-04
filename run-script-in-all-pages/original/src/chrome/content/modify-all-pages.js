@@ -11,8 +11,6 @@ var myExtension = {
     },  
     onPageLoad: function(aEvent) {  
         var doc = aEvent.originalTarget; // doc is document that triggered the event  
-        var win = doc.defaultView; // win is the window for the doc  
-        // test desired conditions and do something  
         if (doc.nodeName != "#document") return; // only documents  
         // make whatever modifications you want to doc
         doc.body.style.border = "5px solid blue";

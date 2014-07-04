@@ -1,0 +1,16 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+@-moz-document url("chrome://browser/content/browser.xul") {
+  #gifinate-button {
+    list-style-image: url("chrome://gifinate/skin/icon16.png");
+  }
+
+  #gifinate-button[cui-areatype="menu-panel"],
+  toolbarpaletteitem[place="palette"] > #gifinate-button {
+    list-style-image: url("chrome://gifinate/skin/icon32.png");
+  }
+}

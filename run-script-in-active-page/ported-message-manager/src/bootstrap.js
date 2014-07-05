@@ -13,41 +13,6 @@ Cu.import("resource:///modules/CustomizableUI.jsm");
 var console =
   Cu.import("resource://gre/modules/devtools/Console.jsm", {}).console;
 
-var gifs = [
-  'http://25.media.tumblr.com/tumblr_ma7rqzY6zQ1qis5xyo1_400.gif',
-  'https://lh3.googleusercontent.com/-OUw4Q9scVeA/T88ag2ms7nI/AAAAAAAAGYk/k61JJgULnL0/s320/90.gif',
-  'https://lh4.googleusercontent.com/-CRSjITDmb4I/USZTvuI_07I/AAAAAAAAIlU/CLKU1HbMC3c/w497-h373/dsf43.gif',
-  'http://i.imgur.com/7Bo2HBb.gif',
-  'https://gs1.wac.edgecastcdn.net/8019B6/data.tumblr.com/5dd5ebbd60379914270b43e5e9644465/tumblr_mkme23FRxa1qb5gkjo1_400.gif',
-  'http://i.imgur.com/VPFVw.gif',
-  'http://i.imgur.com/6xaYo.gif',
-  'http://i.imgur.com/N0Qe0.gif',
-  'http://i.imgur.com/2hyBM.gif',
-  'http://i.imgur.com/yjfDD.gif',
-  'http://25.media.tumblr.com/tumblr_lwlcls5ra01qzrlhgo1_r1_500.gif',
-  'http://media.tumblr.com/tumblr_lmuonu2zHq1qzs6oc.gif'
-];
-
-function getGif() {
-  var index = Math.floor(Math.random() * gifs.length);
-  return gifs[index];
-}
-
-function getGifs(message) {
-  var gifs = new Array(message.data);
-  for (var i = 0; i < gifs.length; i++) {
-    gifs[i] = getGif();
-  }
-  return gifs;
-}
-
-function loadScript(event) {
-  // this seems insane
-  var browserMM = event.target.ownerDocument.defaultView.gBrowser.selectedBrowser.messageManager;
-  browserMM.loadFrameScript("chrome://gifinate/content/frame-script.js", true);
-  browserMM.addMessageListener("request-gifs", getGifs);
-}
-
 function install(aData, aReason) {}
 
 function uninstall(aData, aReason) {}
@@ -80,9 +45,41 @@ let Gifinate = {
         defaultArea : CustomizableUI.AREA_NAVBAR,
         label : "Gifinate Button",
         tooltiptext : "Gifinate!",
-        onCommand : loadScript
+        onCommand : function(aEvent) {
+          Gifinate.replaceImages(aEvent.target.ownerDocument);
+        }
       });
   },
+
+  replaceImages : function(xulDocument) {
+    var browserMM = xulDocument.defaultView.gBrowser.selectedBrowser.messageManager;
+    browserMM.loadFrameScript("chrome://gifinate/content/frame-script.js", true);
+    browserMM.addMessageListener("request-gifs", Gifinate.getGifs);
+  },
+
+  getGifs : function(message) {
+    var gifsToReturn = new Array(message.data);
+    for (var i = 0; i < gifsToReturn.length; i++) {
+      let gif = this.gifs[Math.floor(Math.random() * this.gifs.length)];
+      gifsToReturn[i] = gif;
+    }
+    return gifsToReturn;
+  },
+
+  gifs: [
+  'http://25.media.tumblr.com/tumblr_ma7rqzY6zQ1qis5xyo1_400.gif',
+  'https://lh3.googleusercontent.com/-OUw4Q9scVeA/T88ag2ms7nI/AAAAAAAAGYk/k61JJgULnL0/s320/90.gif',
+  'https://lh4.googleusercontent.com/-CRSjITDmb4I/USZTvuI_07I/AAAAAAAAIlU/CLKU1HbMC3c/w497-h373/dsf43.gif',
+  'http://i.imgur.com/7Bo2HBb.gif',
+  'https://gs1.wac.edgecastcdn.net/8019B6/data.tumblr.com/5dd5ebbd60379914270b43e5e9644465/tumblr_mkme23FRxa1qb5gkjo1_400.gif',
+  'http://i.imgur.com/VPFVw.gif',
+  'http://i.imgur.com/6xaYo.gif',
+  'http://i.imgur.com/N0Qe0.gif',
+  'http://i.imgur.com/2hyBM.gif',
+  'http://i.imgur.com/yjfDD.gif',
+  'http://25.media.tumblr.com/tumblr_lwlcls5ra01qzrlhgo1_r1_500.gif',
+  'http://media.tumblr.com/tumblr_lmuonu2zHq1qzs6oc.gif'
+  ],
 
   uninit : function() {
     CustomizableUI.destroyWidget("gifinate-button");

@@ -13,33 +13,6 @@ Cu.import("resource:///modules/CustomizableUI.jsm");
 var console =
   Cu.import("resource://gre/modules/devtools/Console.jsm", {}).console;
 
-var gifs = [
-  'http://25.media.tumblr.com/tumblr_ma7rqzY6zQ1qis5xyo1_400.gif',
-  'https://lh3.googleusercontent.com/-OUw4Q9scVeA/T88ag2ms7nI/AAAAAAAAGYk/k61JJgULnL0/s320/90.gif',
-  'https://lh4.googleusercontent.com/-CRSjITDmb4I/USZTvuI_07I/AAAAAAAAIlU/CLKU1HbMC3c/w497-h373/dsf43.gif',
-  'http://i.imgur.com/7Bo2HBb.gif',
-  'https://gs1.wac.edgecastcdn.net/8019B6/data.tumblr.com/5dd5ebbd60379914270b43e5e9644465/tumblr_mkme23FRxa1qb5gkjo1_400.gif',
-  'http://i.imgur.com/VPFVw.gif',
-  'http://i.imgur.com/6xaYo.gif',
-  'http://i.imgur.com/N0Qe0.gif',
-  'http://i.imgur.com/2hyBM.gif',
-  'http://i.imgur.com/yjfDD.gif',
-  'http://25.media.tumblr.com/tumblr_lwlcls5ra01qzrlhgo1_r1_500.gif',
-  'http://media.tumblr.com/tumblr_lmuonu2zHq1qzs6oc.gif'
-];
-
-function getGif() {
-  let index = Math.floor(Math.random() * gifs.length);
-  return gifs[index];
-}
-
-function replaceImages(doc) {
-  let images = doc.getElementsByTagName("img");
-  for (var i = 0; i < images.length; ++i) {
-    images[i].src = getGif(); 
-  }
-}
-
 function install(aData, aReason) {}
 
 function uninstall(aData, aReason) {}
@@ -73,10 +46,33 @@ let Gifinate = {
         label : "Gifinate",
         tooltiptext : "Gifinate!",
         onCommand : function(aEvent) {
-          replaceImages(aEvent.target.ownerDocument.defaultView.content.document);
+          Gifinate.replaceImages(aEvent.target.ownerDocument.defaultView.content.document);
         }
       });
   },
+
+  replaceImages : function(contentDocument) {
+      let images = contentDocument.getElementsByTagName("img");
+      for (var i = 0; i < images.length; ++i) {
+        let gif = this.gifs[Math.floor(Math.random() * this.gifs.length)];
+        images[i].src = gif; 
+      }
+    },
+
+  gifs : [
+  'http://25.media.tumblr.com/tumblr_ma7rqzY6zQ1qis5xyo1_400.gif',
+  'https://lh3.googleusercontent.com/-OUw4Q9scVeA/T88ag2ms7nI/AAAAAAAAGYk/k61JJgULnL0/s320/90.gif',
+  'https://lh4.googleusercontent.com/-CRSjITDmb4I/USZTvuI_07I/AAAAAAAAIlU/CLKU1HbMC3c/w497-h373/dsf43.gif',
+  'http://i.imgur.com/7Bo2HBb.gif',
+  'https://gs1.wac.edgecastcdn.net/8019B6/data.tumblr.com/5dd5ebbd60379914270b43e5e9644465/tumblr_mkme23FRxa1qb5gkjo1_400.gif',
+  'http://i.imgur.com/VPFVw.gif',
+  'http://i.imgur.com/6xaYo.gif',
+  'http://i.imgur.com/N0Qe0.gif',
+  'http://i.imgur.com/2hyBM.gif',
+  'http://i.imgur.com/yjfDD.gif',
+  'http://25.media.tumblr.com/tumblr_lwlcls5ra01qzrlhgo1_r1_500.gif',
+  'http://media.tumblr.com/tumblr_lmuonu2zHq1qzs6oc.gif'
+  ],
 
   uninit : function() {
     CustomizableUI.destroyWidget("gifinate-button");

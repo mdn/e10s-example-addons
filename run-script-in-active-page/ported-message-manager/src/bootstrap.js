@@ -53,14 +53,14 @@ let Gifinate = {
 
   replaceImages : function(xulDocument) {
     var browserMM = xulDocument.defaultView.gBrowser.selectedBrowser.messageManager;
-    browserMM.loadFrameScript("chrome://gifinate/content/frame-script.js", true);
+    browserMM.loadFrameScript("chrome://gifinate/content/frame-script.js", false);
     browserMM.addMessageListener("request-gifs", Gifinate.getGifs);
   },
 
   getGifs : function(message) {
     var gifsToReturn = new Array(message.data);
     for (var i = 0; i < gifsToReturn.length; i++) {
-      let gif = this.gifs[Math.floor(Math.random() * this.gifs.length)];
+      let gif = Gifinate.gifs[Math.floor(Math.random() * Gifinate.gifs.length)];
       gifsToReturn[i] = gif;
     }
     return gifsToReturn;
